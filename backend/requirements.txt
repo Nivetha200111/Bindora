@@ -1,0 +1,26 @@
+# Web framework
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# AI/ML
+torch==2.1.2
+transformers==4.37.0
+scikit-learn==1.4.0
+
+# Bioinformatics
+biopython==1.83
+rdkit==2023.9.4
+chembl-webresource-client==0.10.8
+
+# Database
+psycopg2-binary==2.9.9
+sqlalchemy==2.0.25
+
+# Utilities
+pandas==2.2.0
+numpy==1.26.3
+requests==2.31.0
+python-dotenv==1.0.1
+
