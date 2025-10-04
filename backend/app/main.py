@@ -10,6 +10,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.config import settings
 from app.api.routes import router
@@ -131,6 +132,32 @@ async def health_check():
 
 # Include API routes
 app.include_router(router, prefix="/api")
+
+# Mount static files (frontend)
+import os
+frontend_path = os.path.join(os.path.dirname(__file__), "../../frontend/out")
+if os.path.exists(frontend_path):
+    app.mount("/static", StaticFiles(directory=frontend_path), name="static")
+    
+    # Serve frontend files
+    from fastapi.responses import FileResponse
+    
+    @app.get("/{path:path}")
+    async def serve_frontend(path: str):
+        """Serve frontend files"""
+        if path.startswith("api/"):
+            return {"error": "API endpoint not found"}
+        
+        file_path = os.path.join(frontend_path, path)
+        if os.path.exists(file_path) and os.path.isfile(file_path):
+            return FileResponse(file_path)
+        
+        # Serve index.html for SPA routing
+        index_path = os.path.join(frontend_path, "index.html")
+        if os.path.exists(index_path):
+            return FileResponse(index_path)
+        
+        return {"error": "File not found"}
 
 
 @app.exception_handler(Exception)

@@ -1,23 +1,18 @@
 services:
-  # Backend API Service
+  # Combined Full-Stack App
   - type: web
-    name: bindora-backend
+    name: bindora-app
     env: python
-    buildCommand: cd backend && pip install -r requirements.txt
+    buildCommand: |
+      cd backend && pip install -r requirements.txt
+      cd ../frontend && npm install && npm run build
     startCommand: cd backend && python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: ALLOWED_ORIGINS
-        value: https://bindora-frontend.onrender.com
+        value: https://bindora-app.onrender.com
       - key: API_HOST
         value: 0.0.0.0
       - key: API_PORT
         value: 8000
-
-  # Frontend Static Site
-  - type: static
-    name: bindora-frontend
-    buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: frontend/out
-    envVars:
       - key: NEXT_PUBLIC_API_URL
-        value: https://bindora-backend.onrender.com
+        value: https://bindora-app.onrender.com
