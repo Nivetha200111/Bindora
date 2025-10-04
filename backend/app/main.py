@@ -135,29 +135,41 @@ app.include_router(router, prefix="/api")
 
 # Mount static files (frontend)
 import os
+from fastapi.responses import FileResponse
+
 frontend_path = os.path.join(os.path.dirname(__file__), "../../frontend/out")
+
+# Serve static files
 if os.path.exists(frontend_path):
+    app.mount("/_next", StaticFiles(directory=os.path.join(frontend_path, "_next")), name="next")
     app.mount("/static", StaticFiles(directory=frontend_path), name="static")
     
-    # Serve frontend files
-    from fastapi.responses import FileResponse
+    @app.get("/favicon.ico")
+    async def favicon():
+        """Serve favicon"""
+        favicon_path = os.path.join(frontend_path, "favicon.ico")
+        if os.path.exists(favicon_path):
+            return FileResponse(favicon_path)
+        return {"error": "Favicon not found"}
     
     @app.get("/{path:path}")
     async def serve_frontend(path: str):
         """Serve frontend files"""
-        if path.startswith("api/"):
+        # Skip API routes
+        if path.startswith("api/") or path.startswith("docs") or path.startswith("redoc") or path.startswith("openapi.json"):
             return {"error": "API endpoint not found"}
         
+        # Try to serve the specific file
         file_path = os.path.join(frontend_path, path)
         if os.path.exists(file_path) and os.path.isfile(file_path):
             return FileResponse(file_path)
         
-        # Serve index.html for SPA routing
+        # For SPA routing, serve index.html
         index_path = os.path.join(frontend_path, "index.html")
         if os.path.exists(index_path):
             return FileResponse(index_path)
         
-        return {"error": "File not found"}
+        return {"error": "File not found", "path": path}
 
 
 @app.exception_handler(Exception)
