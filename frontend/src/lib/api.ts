@@ -1,6 +1,6 @@
 import { SearchParams, Drug, DrugDetails, SearchResponse } from '@/types';
 
-const API_BASE_URL = (process as any).env?.NEXT_PUBLIC_API_URL || 
+const API_BASE_URL = 
   (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:8000');
 
 interface SearchRequest {
