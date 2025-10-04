@@ -239,7 +239,7 @@ export function DrugDetailModal({ chemblId, onClose }: DrugDetailModalProps) {
                   <Download className="mr-2 h-4 w-4" />
                   Export Report
                 </Button>
-                <Button variant="outline" className="flex-1" asChild>
+                <Button variant="outline" className="flex-1">
                   <a 
                     href={`https://www.ebi.ac.uk/chembl/compound_report_card/${drug.chembl_id}/`}
                     target="_blank"
