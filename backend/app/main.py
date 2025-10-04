@@ -111,8 +111,16 @@ async def add_process_time_header(request: Request, call_next):
 @app.get("/")
 async def root():
     """
-    Root endpoint with API information
+    Serve frontend index.html at root if built assets are present,
+    otherwise return API info JSON.
     """
+    import os
+    from fastapi.responses import FileResponse
+    frontend_root = os.path.join(os.path.dirname(__file__), "../../frontend/out")
+    index_path = os.path.join(frontend_root, "index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
+
     return {
         "message": "Bindora API - AI-powered drug discovery",
         "version": settings.API_VERSION,
