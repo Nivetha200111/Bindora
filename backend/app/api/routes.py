@@ -109,7 +109,7 @@ async def search_drugs(
             "Drug search completed",
             query=request.query,
             results_count=len(results),
-            search_time=f"{search_time".3f"}s"
+            search_time=f"{search_time:.3f}s"
         )
 
         return SearchResponse(
@@ -320,7 +320,7 @@ async def health_check(
         logger.info(
             "Health check completed",
             status=overall_status,
-            health_check_time=f"{health_time".3f"}s"
+            health_check_time=f"{health_time:.3f}s"
         )
 
         return health_response
