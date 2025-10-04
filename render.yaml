@@ -17,7 +17,7 @@ services:
   - type: static
     name: bindora-frontend
     buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: frontend/.next
+    staticPublishPath: frontend/out
     envVars:
       - key: NEXT_PUBLIC_API_URL
         value: https://bindora-backend.onrender.com
